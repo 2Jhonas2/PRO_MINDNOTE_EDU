@@ -1,14 +1,28 @@
+/* =========================================
+   Dashboard responsive (desktop + off-canvas)
+   Mantiene distribución en desktop
+   ========================================= */
+
+/* --- Layout base --- */
 .dashboard-container {
   display: flex;
-  height: 100vh;
   background: #f9f0ff;
+  min-height: 100vh;     /* fallback */
+  min-height: 100svh;    /* viewport estable */
+  position: relative;
 }
 
+/* Sidebar fija en desktop */
 .sidebar {
   width: 250px;
   background: linear-gradient(180deg, #e75480, #8a2be2);
   color: #fff;
   padding: 2rem 1rem;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .sidebar h2 {
@@ -19,6 +33,7 @@
 .sidebar ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .sidebar li {
@@ -39,12 +54,16 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
+/* Área principal: se corre a la derecha del sidebar en desktop */
 .dashboard-main {
   flex: 1;
   display: flex;
   flex-direction: column;
+  margin-left: 250px;   /* coincide con el ancho de la sidebar */
+  min-width: 0;         /* evita overflow horizontal */
 }
 
+/* Header + contenido */
 .dashboard-header {
   background: #fff;
   padding: 1rem 2rem;
@@ -52,20 +71,23 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.75rem;
 }
 
 .dashboard-content {
   padding: 2rem;
 }
 
+/* Cards (mantiene tu distribución en desktop) */
 .cards-container {
   display: flex;
   gap: 1.5rem;
   margin-top: 2rem;
+  flex-wrap: nowrap;
 }
 
 .card {
-  flex: 1;
+  flex: 1 1 0;
   background: #fff;
   padding: 1.5rem;
   border-radius: 12px;
@@ -73,6 +95,118 @@
   transition: transform 0.2s ease;
 }
 
-.card:hover {
-  transform: translateY(-5px);
+.card:hover { transform: translateY(-5px); }
+
+/* --- Botón hamburguesa (solo se muestra en ≤768px) --- */
+.sidebar-toggle {
+  display: none;
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 110; /* por encima del sidebar */
+  background: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,.15);
+}
+
+.sidebar-toggle span {
+  display: block;
+  width: 22px;
+  height: 3px;
+  background: #7b2cbf;
+  border-radius: 2px;
+  margin: 4px 0;
+}
+
+/* --- Backdrop cuando sidebar está abierto en móvil --- */
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.35);
+  z-index: 95;
+  animation: fadeIn .2s ease-out both;
+}
+
+/* --- Preferencias de movimiento --- */
+@media (prefers-reduced-motion: reduce) {
+  .card, .sidebar-toggle { transition: none; }
+  .card:hover { transform: none; }
+}
+
+/* =========================================
+   Breakpoints
+   ========================================= */
+
+/* 1200px: pequeños ajustes de espaciamiento */
+@media (max-width: 1200px) {
+  .dashboard-header { padding: 0.875rem 1.5rem; }
+  .dashboard-content { padding: 1.5rem; }
+}
+
+/* 992px: sidebar un poco más angosta en laptop/tablet horizontal */
+@media (max-width: 992px) {
+  .sidebar { width: 220px; padding: 1.5rem 1rem; }
+  .dashboard-main { margin-left: 220px; }
+  .cards-container { gap: 1.25rem; }
+}
+
+/* 768px: modo móvil/tablet vertical -> off-canvas */
+@media (max-width: 768px) {
+  /* Botón visible */
+  .sidebar-toggle { display: inline-block; }
+
+  /* El main ocupa todo el ancho; el sidebar ya no “reserva” espacio */
+  .dashboard-main { margin-left: 0; }
+
+  /* Sidebar se oculta fuera de la pantalla por defecto */
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform .25s ease;
+    width: 260px;        /* ancho fijo del off-canvas en móvil */
+  }
+
+  /* Cuando el contenedor tiene la clase is-sidebar-open, mostramos el sidebar */
+  .is-sidebar-open .sidebar {
+    transform: translateX(0);
+  }
+
+  .dashboard-header { padding: 0.875rem 1.25rem; }
+  .dashboard-content { padding: 1.25rem; }
+
+  /* Las cards pueden envolver */
+  .cards-container {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .card {
+    flex: 1 1 260px;
+    padding: 1.25rem;
+  }
+}
+
+/* 576px: móviles pequeños */
+@media (max-width: 576px) {
+  .dashboard-header { padding: 0.75rem 1rem; }
+  .dashboard-content { padding: 1rem; }
+
+  .cards-container { gap: 0.875rem; }
+  .card {
+    flex: 1 1 100%;
+    padding: 1rem;
+    border-radius: 10px;
+  }
+}
+
+/* 380px: muy compacto */
+@media (max-width: 380px) {
+  .sidebar { width: 240px; } /* off-canvas un poco más angosto */
+}
+
+/* --- Animación para el backdrop --- */
+@keyframes fadeIn {
+  from { opacity: 0; } to { opacity: 1; }
 }

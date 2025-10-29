@@ -1,45 +1,125 @@
-
 .home-container {
-  height: 100vh;
   width: 100%;
-  background: url("./../assets/disposicion-plana-sucia-elementos-escritorio_23-2148513253.jpg") no-repeat center center/cover;
+  min-height: 83vh;
+  min-height: 83svh;
+  background: url("./../assets/disposicion-plana-sucia-elementos-escritorio_23-2148513253.jpg")
+              no-repeat center / cover;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
+  position: absolute;
+  top: 9.1%;
+  left: 0;
+  right: 0;
+
+  padding: 0 max(1rem, env(safe-area-inset-left, 0px))
+              0 max(1rem, env(safe-area-inset-right, 0px));
 }
+
 
 .overlay {
-  background: rgba(0, 0, 0, 0.5);
-  padding: 3rem;
-  border-radius: 12px;
+  background: var(--overlay-bg);
+  color: var(--home-text);
+  padding: var(--home-pad);
+  border-radius: var(--overlay-radius);
   text-align: center;
-  color: #fff;
-  max-width: 600px;
+  max-width: min(600px, 92vw);
+  backdrop-filter: saturate(120%) blur(1px);
 }
 
+
 .overlay h1 {
-  font-size: 2.5rem;
+  font-size: var(--h1-fs);
   margin-bottom: 1rem;
+  line-height: 1.2;
+  text-wrap: balance;
 }
 
 .overlay p {
-  font-size: 1.2rem;
+  font-size: var(--p-fs);
   margin-bottom: 2rem;
+  line-height: 1.6;
 }
 
 .home-btn {
-  background: #2575fc;
-  color: #fff;
+  background: var(--home-btn-bg);
+  color: var(--home-text);
   border: none;
-  padding: 0.9rem 1.5rem;
+  padding: clamp(0.75rem, 0.7rem + 0.5vw, 0.9rem) clamp(1rem, 0.8rem + 1vw, 1.5rem);
   border-radius: 8px;
-  font-size: 1rem;
-  font-weight: bold;
+  font-size: var(--btn-fs);
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, transform 0.15s ease, outline-color 0.15s ease;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  will-change: transform;
 }
 
 .home-btn:hover {
-  background: #d11a8e;
+  background: var(--home-btn-hover);
+  transform: translateY(-1px);
+}
+
+.home-btn:active {
+  transform: translateY(0);
+}
+
+.home-btn:focus-visible {
+  outline-color: rgba(255, 255, 255, 0.9);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-btn {
+    transition: none;
+  }
+  .home-btn:hover,
+  .home-btn:active {
+    transform: none;
+  }
+}
+
+@media (max-width: 1200px) {
+  .overlay {
+    max-width: min(640px, 92vw);
+  }
+}
+
+@media (max-width: 992px) {
+  .home-container {
+    position: static;
+    min-height: 72svh;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-container {
+    min-height: 66svh;
+    padding-left: max(0.75rem, env(safe-area-inset-left, 0px));
+    padding-right: max(0.75rem, env(safe-area-inset-right, 0px));
+  }
+
+  .overlay {
+    padding: clamp(0.875rem, 1vw + 0.75rem, 1.5rem);
+  }
+
+  .overlay p {
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .home-container {
+    min-height: 60svh;
+  }
+
+  .overlay {
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 380px) {
+  .overlay {
+    padding: 0.75rem;
+  }
 }

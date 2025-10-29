@@ -2,14 +2,16 @@
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 30px;
-  margin-top: 20px; 
+  gap: clamp(0.9rem, 1vw + 0.5rem, 30px);
+  margin-top: 20px;
   width: 100%;
-  padding: 20px;
-  border-radius: 16px;
+  padding: clamp(0.9rem, 0.8rem + 1vw, 20px);
+  border-radius: var(--radius-md);
   background: linear-gradient(135deg, #ff9a9e, #a18cd1, #fbc2eb);
-  font-family: "Poppins", sans-serif;
-  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.1);
+  font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+  box-shadow: var(--shadow-lg);
+  min-width: 0;
+  flex-wrap: nowrap;
 }
 
 
@@ -17,72 +19,75 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 20px;
-  border-radius: 16px;
+  background: var(--panel-bg);
+  padding: clamp(1rem, 0.8rem + 1.2vw, 20px);
+  border-radius: var(--radius-md);
   max-width: 380px;
   width: 100%;
-  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.15);
-  animation: fadeIn 0.8s ease-in-out;
+  box-shadow: var(--shadow-md);
+  animation: fadeIn 0.8s ease-in-out both;
 }
 
 .task-form h2 {
   text-align: center;
   margin-bottom: 8px;
-  font-size: 18px;
-  color: #7b2cbf;
+  font-size: var(--fs-lg);
+  color: var(--brand-3);
 }
 
+.task-form label {
+  font-size: var(--fs-sm);
+  margin-bottom: 2px;
+  font-weight: 600;
+  color: var(--ink-1);
+}
 
 .task-form input,
 .task-form textarea,
 .task-form select {
   padding: 6px 8px;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   border: 2px solid #a200ff;
   border-radius: 8px;
   outline: none;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, outline-color 0.2s ease;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  width: 100%;
 }
 
 .task-form input:focus,
 .task-form textarea:focus,
 .task-form select:focus {
-  border-color: #9d4edd;
-  box-shadow: 0 0 6px #c77dff;
+  border-color: var(--brand-1);
+  box-shadow: 0 0 0 4px rgba(157, 78, 221, 0.2);
 }
-
 
 .task-form textarea {
-  resize: none;
+  resize: vertical;
   min-height: 50px;
 }
-
-
-.task-form label {
-  font-size: 13px;
-  margin-bottom: 2px;
-  font-weight: 500;
-  color: #5a189a;
-}
-
 
 .task-form button {
   margin-top: 8px;
   padding: 8px;
-  font-size: 14px;
-  font-weight: bold;
-  background: linear-gradient(135deg, #9d4edd, #ff6ec7);
+  font-size: var(--fs-md);
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.3s ease;
+  transition: transform 0.15s ease, background 0.3s ease, outline-color 0.15s ease;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  will-change: transform;
 }
 
 .task-form button:hover {
-  transform: scale(1.05);
-  background: linear-gradient(135deg, #7b2cbf, #ff85d8);
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, var(--brand-3), #ff85d8);
 }
 
 .modal-content {
@@ -94,80 +99,74 @@
   max-width: 400px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 
- 
   border: 1px solid transparent;
   background-image: linear-gradient(#fff, #fff),
-    linear-gradient(120deg, #ff4eb8, #9d4edd);
+    linear-gradient(120deg, #ff4eb8, var(--brand-1));
   background-origin: border-box;
   background-clip: content-box, border-box;
 
-  animation: fadeIn 0.3s ease-in-out;
-}
+  animation: fadeIn 0.3s ease-in-out both;
 
+  max-height: 90vh;
+  overflow: auto;
+}
 
 .modal-content h3 {
-  color: #9d4edd;
-  font-size: 22px;
+  color: var(--brand-1);
+  font-size: clamp(1.1rem, 1rem + 0.5vw, 1.375rem);
   margin-bottom: 12px;
-  font-weight: bold;
+  font-weight: 800;
 }
-
 
 .modal-content p {
-  color: #555;
-  font-size: 20px;
+  color: var(--ink-2);
+  font-size: clamp(0.95rem, 0.9rem + 0.4vw, 1.1rem);
   margin-bottom: 25px;
+  line-height: 1.5;
 }
 
-
 .modal-content button {
-  background: linear-gradient(90deg, #9d4edd, #ff4eb8);
+  background: linear-gradient(90deg, var(--brand-1), #ff4eb8);
   color: #fff;
   border: none;
   padding: 10px 20px;
   border-radius: 10px;
-  font-weight: bold;
+  font-weight: 800;
   cursor: pointer;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition: transform 0.15s ease, opacity 0.2s ease, outline-color 0.15s ease;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
 }
 
 .modal-content button:hover {
-  transform: scale(1.05);
-  opacity: 0.8;
+  transform: translateY(-1px);
+  opacity: 0.92;
 }
 
 
 .tasks-list {
   flex: 2;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.15);
+  background: var(--panel-bg);
+  border-radius: var(--radius-md);
+  padding: clamp(1rem, 0.9rem + 1.2vw, 1.5rem);
+  box-shadow: var(--shadow-lg);
   overflow-y: auto;
   min-height: 200px;
-  animation: fadeIn 1s ease-in-out;
+  animation: fadeIn 1s ease-in-out both;
+  background: linear-gradient(135deg, #ffffffcc, #ffffff99);
 }
 
 .tasks-list h2 {
   margin-bottom: 15px;
-  font-size: 18px;
-  color: #7b2cbf;
-}
-
-
-
-.tasks-list {
-  background: linear-gradient(135deg, #ffffffcc, #ffffff99);
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  font-size: var(--fs-lg);
+  color: var(--brand-3);
 }
 
 .tasks-list h3 {
   margin-bottom: 15px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #5a189a; /* Morado oscuro */
+  font-size: clamp(1rem, 0.95rem + 0.4vw, 1.2rem);
+  font-weight: 800;
+  color: var(--ink-1);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -177,26 +176,32 @@
   margin-bottom: 10px;
   border-radius: 12px;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
   background: #fff;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-sm);
 }
 
 .accordion-header {
   width: 100%;
   text-align: left;
   padding: 12px 16px;
-  font-weight: 600;
-  font-size: 1rem;
+  font-weight: 700;
+  font-size: var(--fs-md);
   background: linear-gradient(135deg, #e0aaff, #c77dff);
   color: #fff;
   border: none;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.25s ease, outline-color 0.15s ease;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
 }
 
 .accordion-header:hover {
-  background: linear-gradient(135deg, #c77dff, #9d4edd);
+  background: linear-gradient(135deg, #c77dff, var(--brand-1));
+}
+
+.accordion-header:focus-visible {
+  outline-color: rgba(157, 78, 221, 0.85);
 }
 
 .accordion-content {
@@ -210,8 +215,8 @@
   margin-bottom: 8px;
   border-radius: 10px;
   background: #f3e9ff;
-  border-left: 4px solid #9d4edd;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-left: 4px solid var(--brand-1);
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
 }
 
 .accordion-content li:hover {
@@ -225,16 +230,91 @@
   color: #666;
 }
 
-
-
-
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .task-form,
+  .tasks-list,
+  .modal-content {
+    animation: none;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .task-form button,
+  .modal-content button,
+  .accordion-item,
+  .accordion-content li {
+    transition: none;
+  }
+}
+
+@media (max-width: 1200px) {
+  .tasks-container {
+    gap: var(--space-md);
+    padding: var(--space-md);
+  }
+}
+
+@media (max-width: 992px) {
+  .tasks-container {
+    flex-wrap: wrap;
+  }
+
+  .task-form {
+    max-width: 520px;
+  }
+
+  .tasks-list {
+    flex: 1 1 100%;
+    min-height: 240px;
+  }
+}
+
+@media (max-width: 768px) {
+  .tasks-container {
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .task-form {
+    max-width: 100%;
+  }
+
+  .accordion-header {
+    font-size: var(--fs-md);
+    padding: 12px;
+  }
+
+  .accordion-content {
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .tasks-container {
+    padding: var(--space-sm);
+    border-radius: 12px;
+  }
+
+  .task-form {
+    border-radius: 12px;
+    padding: var(--space-md);
+  }
+
+  .tasks-list {
+    border-radius: 12px;
+    padding: var(--space-md);
+  }
+}
+
+@media (max-width: 380px) {
+  .task-form,
+  .tasks-list {
+    border-radius: 10px;
+  }
+
+  .accordion-content li {
+    padding: 8px;
   }
 }

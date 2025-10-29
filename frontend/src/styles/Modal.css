@@ -2,69 +2,128 @@
   display: flex;
   position: fixed;
   z-index: 1000;
-  left: 0;
-  top: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.4);
   justify-content: center;
   align-items: center;
+  overflow: auto;
+  padding: max(1rem, env(safe-area-inset-top, 0px))
+           max(1rem, env(safe-area-inset-right, 0px))
+           max(1rem, env(safe-area-inset-bottom, 0px))
+           max(1rem, env(safe-area-inset-left, 0px));
+
+  backdrop-filter: blur(2px);
 }
 
-
 .modal-content {
-  background: white;
-  padding: 30px;
-  border-radius: 16px;
+  background: #fff;
+  padding: clamp(1rem, 0.8rem + 1.8vw, 30px);
+  border-radius: var(--radius-md);
   text-align: center;
   width: 350px;
-  max-width: 90%;
-  font-family: "Poppins", sans-serif;
-  animation: fadeIn 0.5s ease-in-out;
+  max-width: 90vw;
+  font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+  animation: fadeIn 0.5s ease-in-out both;
+
   border: 4px solid transparent;
   background-clip: padding-box, border-box;
   background-origin: border-box;
-  background-image: linear-gradient(white, white),
-    linear-gradient(135deg, #ff6ec7, #9d4edd);
+  background-image:
+    linear-gradient(#fff, #fff),
+    linear-gradient(135deg, var(--brand-2), var(--brand-1));
+
+  box-shadow: var(--shadow-lg);
+
+  max-height: 90vh;
+  overflow: auto;
 }
 
 
 .modal-content h2 {
-  color: #9d4edd;
-  margin-bottom: 10px;
+  color: var(--brand-1);
+  margin-bottom: var(--space-xs);
+  font-size: clamp(1.1rem, 1rem + 0.8vw, 1.5rem);
+  line-height: 1.2;
+  text-wrap: balance;
 }
 
-
 .modal-content p {
-  font-size: 14px;
-  margin-bottom: 15px;
-  color: #444;
+  font-size: clamp(0.9rem, 0.85rem + 0.3vw, 0.95rem);
+  margin-bottom: var(--space-sm);
+  color: var(--ink-1);
+  line-height: 1.55;
 }
 
 
 .modal-content button {
-  background: linear-gradient(135deg, #9d4edd, #ff6ec7);
-  color: white;
+  background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+  color: #fff;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--btn-radius);
   padding: 8px 16px;
-  font-weight: bold;
+  font-weight: 800;
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.3s ease;
+  transition: transform 0.15s ease, background 0.3s ease, outline-color 0.15s ease, opacity 0.2s ease;
+
+  outline: 2px solid transparent;
+  outline-offset: 2px;
 }
 
 .modal-content button:hover {
-  transform: scale(1.05);
-  background: linear-gradient(135deg, #7b2cbf, #ff85d8);
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, var(--brand-3), #ff85d8);
 }
 
+.modal-content button:active {
+  transform: translateY(0);
+}
+
+.modal-content button:focus-visible {
+  outline-color: rgba(157, 78, 221, 0.8);
+}
+
+
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-content {
+    animation: none;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .modal-content button {
+    transition: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    border-radius: 14px;
+    max-width: min(94vw, 480px);
+  }
+}
+
+@media (max-width: 576px) {
+  .modal {
+    padding: max(0.75rem, env(safe-area-inset-top, 0px))
+             max(0.75rem, env(safe-area-inset-right, 0px))
+             max(0.75rem, env(safe-area-inset-bottom, 0px))
+             max(0.75rem, env(safe-area-inset-left, 0px));
+  }
+
+  .modal-content {
+    width: 100%;
+    max-width: 92vw;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 380px) {
+  .modal-content {
+    padding: 0.9rem;
+    border-radius: 10px;
   }
 }
