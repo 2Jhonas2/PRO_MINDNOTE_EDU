@@ -1,12 +1,40 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import "../styles/dashboard.css"; // asegúrate que el archivo sea en minúsculas
+import "../styles/dashboard.css";
+import axios from "axios";
 
 function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [usuarioNombre, setUsuarioNombre] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  // Cerrar el sidebar al cambiar a desktop (evita que quede abierto si se redimensiona)
+  useEffect(() => {
+    const fetchPerfil = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) throw new Error("No hay token");
+
+        const res = await axios.get("http://localhost:3001/login/perfil", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (res.data.success && res.data.data) {
+          // Aquí podrías pedir también nombre/apellido si el backend los envía
+          setUsuarioNombre(res.data.data.usuario_nombre || "Usuario");
+        }
+      } catch (err) {
+        console.error("Error al obtener perfil:", err);
+        setUsuarioNombre("Usuario");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPerfil();
+  }, []);
+
+  // sidebar responsive
   useEffect(() => {
     const onResize = () => {
       if (window.innerWidth > 768 && sidebarOpen) setSidebarOpen(false);
@@ -20,14 +48,13 @@ function Dashboard() {
 
   return (
     <div className={`dashboard-container ${sidebarOpen ? "is-sidebar-open" : ""}`}>
-      {/* Sidebar fija en desktop / off-canvas en móvil */}
-      <Sidebar />
+      <aside id="sidebar" className="sidebar-wrapper">
+        <Sidebar />
+      </aside>
 
-      {/* Backdrop sólo en móvil cuando el sidebar está abierto */}
       {sidebarOpen && <div className="sidebar-backdrop" onClick={closeSidebar} />}
 
       <div className="dashboard-main">
-        {/* Botón hamburguesa visible en ≤768px */}
         <button
           className="sidebar-toggle"
           aria-label="Abrir menú"
@@ -43,7 +70,11 @@ function Dashboard() {
         <Header />
 
         <div className="dashboard-content">
-          <h2>Bienvenido a Nuestro Sitio</h2>
+          <h2>
+            {loading
+              ? "Cargando..."
+              : `Bienvenido${usuarioNombre ? ` ${usuarioNombre}`:""}!`}
+          </h2>
           <p>Has iniciado sesión correctamente.</p>
 
           <div className="cards-container">

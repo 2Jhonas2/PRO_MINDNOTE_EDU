@@ -1,39 +1,71 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req,
+} from '@nestjs/common';
 import { NotificacionesService } from './notificaciones.service';
-import { CreateNotificacioneDto } from './dto/create-notificacione.dto';
-import { UpdateNotificacioneDto } from './dto/update-notificacione.dto';
+import { JwtAuthGuard } from 'src/login/jwt-auth.guard';
 
 @Controller('notificaciones')
+@UseGuards(JwtAuthGuard)
 export class NotificacionesController {
   constructor(private readonly notificacionesService: NotificacionesService) {}
 
   @Post()
-  create(@Body() body:any) {
-    return this.notificacionesService.create(body);
+  async create(@Body() body: any) {
+    const data = await this.notificacionesService.create(body);
+    return { success: true, data };
   }
 
   @Get()
-  findAll() {
-    return this.notificacionesService.findAll();
+  async listar(@Req() req: any) {
+    const usuario_id = req.user.sub;
+    const data = await this.notificacionesService.listarPorUsuario(usuario_id);
+    return { success: true, data };
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.notificacionesService.findOne(+id);
+  @Get('contador')
+  async contador(@Req() req: any) {
+    const usuario_id = req.user.sub;
+    const noLeidas = await this.notificacionesService.contarNoLeidas(usuario_id);
+    return { success: true, noLeidas };
+  }
+
+  // ✅ la ruta correcta que estás llamando desde el front
+  @Patch('marcar-todas')
+  async marcarTodas(@Req() req: any) {
+    const usuario_id = req.user.sub;
+    const data = await this.notificacionesService.marcarTodas(usuario_id);
+    return { data }; // { success:true, updated: n }
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() body:any) {
-    return {
-      "exito": true,
-      "mensaje": "Notificación actualizada exitosamente",
-      "id": id,
-      "data": this.notificacionesService.update(+id, body)
-  };
-}
+  async marcarLeida(@Param('id') id: string, @Req() req: any) {
+    const usuario_id = req.user.sub;
+    const data = await this.notificacionesService.marcarLeida(Number(id), usuario_id);
+    return { success: true, data };
+  }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.notificacionesService.remove(+id);
+  // (opcionales admin/legacy)
+  @Get('admin/todas')
+  async findAll() {
+    const data = await this.notificacionesService.findAll();
+    return { success: true, data };
+  }
+
+  @Get('admin/:id')
+  async findOne(@Param('id') id: string) {
+    const data = await this.notificacionesService.findOne(+id);
+    return { success: true, data };
+  }
+
+  @Patch('admin/:id')
+  async update(@Param('id') id: string, @Body() body: any) {
+    const data = await this.notificacionesService.update(+id, body);
+    return { success: true, mensaje: 'Notificación actualizada exitosamente', id, data };
+  }
+
+  @Delete('admin/:id')
+  async remove(@Param('id') id: string) {
+    const data = await this.notificacionesService.remove(+id);
+    return { success: true, ...data };
   }
 }

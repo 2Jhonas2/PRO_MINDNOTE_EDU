@@ -97,11 +97,20 @@ PRO_MINDNOTE.EDU/
      npm install
      npx prisma generate
      npx prisma migrate deploy
+     npm install bcrypt
+     npm install --save-dev @types/bcrypt
+     npm i @nestjs/jwt jsonwebtoken
+     npm i -D @types/jsonwebtoken
+     npm i jwt-decode
+
+
+
      ```
    - Frontend:
      ```
      cd frontend
      npm install
+     npm i jwt-decode
      ```
 
 3. **Configura las variables de entorno**

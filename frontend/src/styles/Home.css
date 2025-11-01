@@ -18,13 +18,12 @@
 
 
 .overlay {
-  background: var(--overlay-bg);
-  color: var(--home-text);
-  padding: var(--home-pad);
-  border-radius: var(--overlay-radius);
+  background: rgba(0, 0, 0, 0.5);
+  padding: 3rem;
+  border-radius: 12px;
   text-align: center;
-  max-width: min(600px, 92vw);
-  backdrop-filter: saturate(120%) blur(1px);
+  color: #fff;
+  max-width: 600px;
 }
 
 
